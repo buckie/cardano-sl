@@ -50,14 +50,15 @@ getCurrentSlotFlat = fmap flattenSlotId <$> getCurrentSlot
 -- | Get timestamp when given slot starts.
 getSlotStart :: MonadSlotsData m => SlotId -> m (Maybe Timestamp)
 getSlotStart SlotId{..} = do
+    systemStart <- getSystemStart
     SlottingData{..} <- getSlottingData
     if | siEpoch < sdPenultEpoch -> pure Nothing
-       | siEpoch == sdPenultEpoch -> pure . Just $ slotTimestamp siSlot sdPenult
-       | siEpoch == sdPenultEpoch + 1 -> pure . Just $ slotTimestamp siSlot sdLast
+       | siEpoch == sdPenultEpoch -> pure . Just $ slotTimestamp systemStart siSlot sdPenult
+       | siEpoch == sdPenultEpoch + 1 -> pure . Just $ slotTimestamp systemStart siSlot sdLast
        | otherwise -> pure Nothing
   where
-    slotTimestamp (getSlotIndex -> locSlot) EpochSlottingData{..} =
-        esdStart + Timestamp (fromIntegral locSlot * convertUnit esdSlotDuration)
+    slotTimestamp systemStart (getSlotIndex -> locSlot) EpochSlottingData{..} =
+        systemStart + esdStartDifference + Timestamp (fromIntegral locSlot * convertUnit esdSlotDuration)
 
 -- | Get timestamp when given slot starts empatically, which means
 -- that function throws exception when slot start is unknown.
