@@ -11,5 +11,4 @@ data UpdateParams = UpdateParams
       upUpdateWithPkg :: !Bool
     , -- | List of update server URLs
       upUpdateServers :: ![Text]
-    }
-    deriving (Show)
+    } deriving (Show)

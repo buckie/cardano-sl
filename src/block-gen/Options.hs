@@ -1,8 +1,9 @@
+{-# LANGUAGE ApplicativeDo   #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 -- | Command line options
 
-module BlockGenOptions
+module Options
        ( BlockGenOptions (..)
        , getBlockGenOptions
        ) where
@@ -12,18 +13,17 @@ import           Universum
 import           Options.Applicative          (Parser, auto, execParser, footerDoc,
                                                fullDesc, header, help, helper, info,
                                                infoOption, long, metavar, option,
-                                               progDesc, short, strOption, value)
+                                               progDesc, strOption, value)
 import           Text.PrettyPrint.ANSI.Leijen (Doc)
 
 import           Pos.Constants                (blkSecurityParam, genesisSlotDuration)
-import           Pos.Core                     (Timestamp (..))
 
 data BlockGenOptions = BlockGenOptions
     { bgoK            :: !Int
     -- ^ k constant of algorithm (from paper)
     -- Will be taken from constants if command-line is not specified.
     , bgoSlotDuration :: !Int
-    -- ^ Slot duration (in seconds)
+    -- ^ Slot duration (in milliseconds)
     -- Will be taken from constants if command-line is not specified.
     , bgoN            :: !Int
     -- ^ Number of blocks to generate.
@@ -44,8 +44,8 @@ optionsParser = do
     bgoSlotDuration <- option auto $
         long    "slot-duration" <>
         metavar "INT" <>
-        value (getTimestamp genesisSlotDuration) <>
-        help "Slot duration (in secs)"
+        value (fromIntegral genesisSlotDuration) <>
+        help "Slot duration (in ms)"
 
     bgoN <- option auto $
         long    "n" <>

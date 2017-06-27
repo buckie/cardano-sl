@@ -12,6 +12,7 @@ module Pos.Launcher.Resource
        , hoistNodeResources
 
        , allocateNodeResources
+       , allocateNodeContext
        , releaseNodeResources
        , bracketNodeResources
 
@@ -19,6 +20,7 @@ module Pos.Launcher.Resource
        , loggerBracket
        , bracketKademlia
        , bracketTransport
+       , setupLoggers
        ) where
 
 import           Universum                   hiding (bracket, finally)

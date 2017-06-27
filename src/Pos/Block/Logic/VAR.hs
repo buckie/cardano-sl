@@ -7,6 +7,7 @@ module Pos.Block.Logic.VAR
 
        , BlockLrcMode
        , verifyAndApplyBlocks
+       , verifyAndApplyBlocksInternal
        , rollbackBlocks
        , applyWithRollback
        ) where
