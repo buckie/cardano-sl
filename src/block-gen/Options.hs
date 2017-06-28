@@ -25,7 +25,9 @@ data BlockGenOptions = BlockGenOptions
     , bgoSlotDuration :: !Int
     -- ^ Slot duration (in milliseconds)
     -- Will be taken from constants if command-line is not specified.
-    , bgoN            :: !Int
+    , bgoNodes        :: !Int
+    -- ^ Number of nodes to generate blocks.
+    , bgoLength       :: !Int
     -- ^ Number of blocks to generate.
     , bgoPath         :: !FilePath
     -- ^ Location of generated database.
@@ -47,10 +49,15 @@ optionsParser = do
         value (fromIntegral genesisSlotDuration) <>
         help "Slot duration (in ms)"
 
-    bgoN <- option auto $
-        long    "n" <>
+    bgoLength <- option auto $
+        long    "length" <>
         metavar "INT" <>
-        help "Length of blockchain."
+        help "Length of generated blockchain."
+
+    bgoNodes <- option auto $
+        long    "nodes" <>
+        metavar "INT" <>
+        help "Number of nodes to participate in generation"
 
     bgoPath <- strOption $
         long    "db-path" <>
@@ -85,6 +92,6 @@ usageExample = undefined
 --   stack exec -- cardano-block-gen           \
 --     -k 2                                    \
 --     --slot-duration 15                      \
---     -n 5000                                 \
+--     --length 5000                                 \
 --     --db-path generated-db
 --     --seed 701|]

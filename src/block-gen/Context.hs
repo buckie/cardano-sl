@@ -45,8 +45,9 @@ bracketBlockGenMode
     -> Utxo
     -> SscParams ssc
     -> Production a
-bracketBlockGenMode action dbPath utxo sscnp = bracket (openNodeDBs True dbPath) closeNodeDBs $ \nodeDBs -> do
-    (_, sk) <- keyGen
+bracketBlockGenMode action dbPath utxo sscnp =
+  bracket (openNodeDBs True dbPath) closeNodeDBs $ \nodeDBs -> do
+    (_, fakeSK) <- keyGen
     systemStart <- Timestamp <$> currentTime
     (futureLrcContext, putLrcContext) <- newInitFuture
     (futureSlottingVar, putSlottingVar) <- newInitFuture
@@ -66,7 +67,7 @@ bracketBlockGenMode action dbPath utxo sscnp = bracket (openNodeDBs True dbPath)
                 { npDbPathM        = dbPath
                 , npRebuildDb      = True
                 , npSystemStart    = systemStart
-                , npSecretKey      = sk
+                , npSecretKey      = fakeSK
                 , npUserSecret     = def
                 , npBaseParams     = bp
                 , npCustomUtxo     = utxo
