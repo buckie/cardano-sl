@@ -18,7 +18,7 @@ import           Formatting                  (build, sformat, (%))
 import           System.Wlog                 (logWarning)
 
 import           Pos.Core                    (Coin, EpochIndex, SlotId (siEpoch),
-                                              addressHash, applyCoinPortion, mkCoin,
+                                              addressHash, applyCoinPortionUp, mkCoin,
                                               unsafeAddCoin)
 import           Pos.Core.Constants          (genesisUpdateProposalThd)
 import           Pos.Crypto                  (PublicKey, hash)
@@ -154,7 +154,7 @@ filterProposalsByThd epoch proposalsHM = getEpochTotalStake epoch >>= \case
                 (sformat ("Couldn't get stake in filterProposalsByTxd for epoch "%build)
                          epoch)
     Just totalStake -> do
-        let threshold = applyCoinPortion genesisUpdateProposalThd totalStake
+        let threshold = applyCoinPortionUp genesisUpdateProposalThd totalStake
         let proposals = HM.toList proposalsHM
         filtered <-
             HM.fromList <$> filterM (hasEnoughStake threshold . fst) proposals

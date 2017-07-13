@@ -31,7 +31,7 @@ import           Ether.Internal              (HasLens (..))
 import           Pos.Binary.Core             ()
 import           Pos.Constants               (genesisHeavyDelThd)
 import           Pos.Context                 (GenesisUtxo, genesisStakesM)
-import           Pos.Core                    (EpochIndex, applyCoinPortion)
+import           Pos.Core                    (EpochIndex, applyCoinPortionUp)
 import           Pos.DB.Class                (MonadDB, MonadDBRead)
 import           Pos.Genesis                 (genesisDelegation)
 import           Pos.Lrc.Class               (RichmenComponent (..),
@@ -65,7 +65,7 @@ computeInitial
 computeInitial initialDistr proxy =
     findRichmenPure
         initialDistr
-        (applyCoinPortion (rcInitialThreshold proxy))
+        (applyCoinPortionUp (rcInitialThreshold proxy))
         richmenType
   where
     richmenType

@@ -340,9 +340,16 @@ unsafeGetCoin :: Coin -> Word64
 unsafeGetCoin = getCoin
 {-# INLINE unsafeGetCoin #-}
 
--- | CoinPortion is some portion of Coin, it must be in [0 .. coinPortionDenominator].
--- Main usage of it is multiplication with Coin. Usually it's needed to
--- determine some threshold expressed as portion of total stake.
+-- | CoinPortion is some portion of Coin; it is interpreted as a fraction
+-- with denominator of 'coinPortionDenominator'. The numerator must be in the
+-- interval of [0, coinPortionDenominator].
+--
+-- Usually 'CoinPortion' is used to determine some threshold expressed as
+-- portion of total stake.
+--
+-- To multiply a coin portion by 'Coin', use 'applyCoinPortionDown' (when
+-- calculating number of coins) or 'applyCoinPortionUp' (when calculating a
+-- threshold).
 newtype CoinPortion = CoinPortion
     { getCoinPortion :: Word64
     } deriving (Show, Ord, Eq, Generic, Typeable, NFData)
